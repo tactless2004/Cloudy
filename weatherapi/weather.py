@@ -5,7 +5,7 @@ Weather object holds data from a gridpoints/.../forecast request.
 class Weather:
     '''
     Weather data for a single point in time.
-    WARNING: These should be generated via. NWSData.get_forecast()
+    WARNING: These should be generated with NWSData.get_forecast()
     '''
     def __init__(self, periods: list):
         self._periods = periods
