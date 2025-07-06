@@ -1,9 +1,12 @@
 '''
 Weather object holds data from a gridpoints/.../forecast request.
 '''
-import json
 
 class Weather:
+    '''
+    Weather data for a single point in time.
+    WARNING: These should be generated via. NWSData.get_forecast()
+    '''
     def __init__(self, periods: list):
         self._periods = periods
         self.temperature = int(periods[0]['temperature'])
@@ -13,9 +16,17 @@ class Weather:
         self.detailed_forecast = periods[0]['detailedForecast']
 
     def __str__(self):
-        return f"{self.temperature}F, {self.wind_speed} -> {self.wind_direction}\n{self.detailed_forecast}"
-        
-    def test(self):
-        for key in self._periods[0].keys():
-            print(f"{key}:{self._periods[0][key]}")
-        
+        '''
+        Brief summary of weather data encapsulated in the object.
+        '''
+        return (
+            f"{self.temperature}F, " +
+            f"{self.wind_speed} -> {self.wind_direction}\n" +
+            f"{self.detailed_forecast}"
+        )
+
+    def get_raw(self, period: int) -> dict:
+        '''
+        Get raw['properties']['periods'] data (mostly for debug)
+        '''
+        return self._periods[period]

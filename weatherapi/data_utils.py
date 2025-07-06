@@ -1,8 +1,8 @@
 '''
 Utilities for building NWSData objects.
 '''
-import requests
 import json
+import requests
 from weatherapi.nwsdata import NWSData
 from weatherapi.exceptions import IllegalGeoLocation
 
@@ -10,7 +10,7 @@ def from_geo(lat: float, lon: float) -> NWSData:
     '''
     Build an NWSData object from latitude, longitude geodata.
     '''
-    r = requests.get(f"https://api.weather.gov/points/{lat},{lon}")
+    r = requests.get(f"https://api.weather.gov/points/{lat},{lon}", timeout = 5)
     if r.status_code == 404:
         raise IllegalGeoLocation(f"({lon}, {lat}) is not recognized by api.weather.gov")
 
