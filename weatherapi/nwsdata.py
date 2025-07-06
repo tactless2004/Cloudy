@@ -2,7 +2,8 @@
 NWS Data is an interface for interacting with api.weather.gov data
 '''
 import requests
-
+import json
+from weatherapi.weather import Weather
 
 
 class NWSData:
@@ -19,4 +20,4 @@ class NWSData:
 
     def get_forecast(self):
         r = requests.get(f"https://api.weather.gov/gridpoints/{self._wfo}/{self._gridx},{self._gridy}/forecast")
-        return r.text
+        return Weather(json.loads(r.text)['properties']['periods'])
