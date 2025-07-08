@@ -14,6 +14,7 @@ class Weather:
         self.wind_direction = periods[0]['windDirection']
         self.short_forecast = periods[0]['shortForecast']
         self.detailed_forecast = periods[0]['detailedForecast']
+        self.percipitation_chance = str(periods[0]['probabilityOfPrecipitation']['value']) + "%"
 
     def __str__(self):
         '''
@@ -22,6 +23,7 @@ class Weather:
         return (
             f"{self.temperature}F, " +
             f"{self.wind_speed} -> {self.wind_direction}\n" +
+            f"Precipitation: {self.percipitation_chance}\n" +
             f"{self.detailed_forecast}"
         )
 
