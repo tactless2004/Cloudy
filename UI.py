@@ -3,35 +3,13 @@ from textual.widgets import Input, Button, Label
 from textual.containers import HorizontalGroup, Center
 from weatherapi import from_geo
 from weatherapi.exceptions import IllegalGeoLocation
-
-class WeatherButton(HorizontalGroup):
-    def compose(self) -> ComposeResult:
-        yield Button(
-            "Check Weather",
-            id = "weather-input-button",
-            variant = "success"
-        )
-        yield Label(
-            "",
-            id = "weather-button-error-label"
-        )
-
+from TUI.widgets import DaySelector, GeodataInput
 
 class InputApp(App):
 
     def compose(self) -> ComposeResult:
-        yield Input(
-            placeholder = "Latitude",
-            id = "lat",
-            type = "number"
-        )
-        yield Input(
-            placeholder = "Longitude",
-            id = "lon",
-            type = "number"
-        )
-        yield WeatherButton()
-
+        DaySelector()
+        GeodataInput()
         output_label = Label("", id = "output-label")
         output_label.styles.height = 20
         output_label.styles.width = 50

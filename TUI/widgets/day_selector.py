@@ -1,8 +1,9 @@
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal
+from textual.widget import Widget
 from textual.widgets import Button
 
-class DaySelector(App):
+class DaySelector(Widget):
     CSS_PATH = "day_selector.tcss"
     def compose(self) -> ComposeResult:
         yield Horizontal(
@@ -14,7 +15,3 @@ class DaySelector(App):
             Button("Almost Week", id = "day6-button"),
             Button("In a Week", id = "day7-button")
         )
-
-if __name__ == "__main__":
-    app = DaySelector()
-    app.run()
