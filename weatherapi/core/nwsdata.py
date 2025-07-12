@@ -3,7 +3,7 @@ NWS Data is an interface for interacting with api.weather.gov data
 '''
 import json
 import requests
-from weatherapi.weather import Weather
+from weatherapi.core.weather import Weather
 
 
 class NWSData:

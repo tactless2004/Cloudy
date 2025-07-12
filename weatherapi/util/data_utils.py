@@ -3,7 +3,7 @@ Utilities for building NWSData objects.
 '''
 import json
 import requests
-from weatherapi.nwsdata import NWSData
+from weatherapi.core.nwsdata import NWSData
 from weatherapi.exceptions import IllegalGeoLocation
 
 def from_geo(lat: float, lon: float) -> NWSData:
