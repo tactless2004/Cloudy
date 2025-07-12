@@ -1,11 +1,18 @@
+'''
+UI.py
+
+Textual UI for Cloudy
+'''
+# pylint: disable=C0103
 from textual.app import App, ComposeResult
-from textual.widgets import Input, Button, Pretty, Label
+from textual.widgets import Input, Button, Label
 from textual.containers import Vertical
 from weatherapi import from_geo
 from weatherapi.exceptions import IllegalGeoLocation
 from TUI.widgets import DaySelector, GeodataInput
 
 class InputApp(App):
+    '''textual UI for Cloudy'''
     DEFAULT_CSS = """
     Label {
         text-wrap: wrap;
@@ -18,8 +25,9 @@ class InputApp(App):
             yield Label("", id = "output-label")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
+        '''Behavior for button events'''
         if event.button.id == "weather-input-button":
-            # Grab lat, lon values 
+            # Grab lat, lon values
             # catch Value Error if the fields are left empty
             try:
                 lat = float(self.query_one("#latitude-input", Input).value)

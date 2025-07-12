@@ -1,9 +1,17 @@
+'''
+TUI/widgets/geodata_input.py
+
+Widget for inputing geodata, supports Geodata and Geocoding look.
+'''
 from textual.app import ComposeResult
 from textual.containers import Vertical, Horizontal
 from textual.widget import Widget
 from textual.widgets import Button, Input, Label
 
 class WeatherButton(Widget):
+    '''
+    Button for sending data to weather api, and text section for error handle response.
+    '''
     CSS = '''
         Button {
             margin-top: 10px;
@@ -21,6 +29,7 @@ class WeatherButton(Widget):
         )
 
 class GeodataInput(Widget):
+    '''Input form for selecting location.'''
     DEFAULT_CSS = """
     GeodataInput {
         height: 10;

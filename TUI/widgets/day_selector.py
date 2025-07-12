@@ -1,8 +1,14 @@
-from textual.app import App, ComposeResult
+'''
+TUI/widgets/day_selector.py
+
+Widget for selecting the day, dynamically changed based on the current day.
+'''
+from textual.app import ComposeResult
 from textual.containers import HorizontalGroup
 from textual.widgets import Button
 
 class DaySelector(HorizontalGroup):
+    '''Textual Widget for selecting the day (WIP)'''
     DEFAULT_CSS = """
     GeodataInput {
         height: 1fr;
