@@ -4,7 +4,7 @@ TUI/widgets/geodata_input.py
 Widget for inputing geodata, supports Geodata and Geocoding look.
 '''
 from textual.app import ComposeResult
-from textual.containers import Vertical, Horizontal
+from textual.containers import Vertical, Horizontal, Center
 from textual.widget import Widget
 from textual.widgets import Button, Input, Label
 
@@ -12,9 +12,9 @@ class WeatherButton(Widget):
     '''
     Button for sending data to weather api, and text section for error handle response.
     '''
-    CSS = '''
+    DEFAULT_CSS = '''
         Button {
-            margin-top: 10px;
+            margin-top: 1;
         }
     '''
     def compose(self) -> ComposeResult:
@@ -34,22 +34,26 @@ class GeodataInput(Widget):
     GeodataInput {
         height: 10;
     }
+    Center {
+        border: solid green;
+    }
     """
     def compose(self) -> ComposeResult:
-        with Horizontal():
-            with Vertical():
-                yield Label("Latitude")
-                yield Input(
-                    placeholder = "lat",
-                    id = "latitude-input",
-                    type = "number"
-                )
+        with Center():
+            with Horizontal():
+                with Vertical():
+                    yield Label("Latitude")
+                    yield Input(
+                        placeholder = "lat",
+                        id = "latitude-input",
+                        type = "number"
+                    )
 
-                yield Label("Longitude")
-                yield Input(
-                    placeholder="lon",
-                    id = "longitude-input",
-                    type = "number"
-                )
-            with Vertical():
-                yield WeatherButton()
+                    yield Label("Longitude")
+                    yield Input(
+                        placeholder="lon",
+                        id = "longitude-input",
+                        type = "number"
+                    )
+                with Vertical():
+                    yield WeatherButton()
