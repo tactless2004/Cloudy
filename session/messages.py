@@ -1,7 +1,7 @@
 '''
 Message definitions for communication between Cloudy UIs and Cloudy API Session
 '''
-
+# pylint: disable=R0902
 from dataclasses import dataclass
 from typing import Optional
 @dataclass

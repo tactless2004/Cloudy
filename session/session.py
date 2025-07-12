@@ -3,20 +3,32 @@ Session state for Cloudy UIs
 '''
 from session.messages import Response
 from weatherapi.core import NWSData, Weather
-from weatherapi.util import from_geo
-from weatherapi.exceptions import IllegalGeoLocation
+from weatherapi.util import from_geo, from_location
+from weatherapi.exceptions import IllegalGeoLocation, InvalidLocation
 
 class Session:
     '''
     Session object for Cloudy UIs
     '''
     def __init__(self):
-        self._cached_nws_data = None
-        self._cached_weather_data = None
+        self._cached_nws_data: NWSData
+        self._cached_weather_data: Weather
 
     @staticmethod
     def _validate_geodata(lat, lon) -> tuple[float, float]:
         return (float(lat), float(lon))
+
+    @staticmethod
+    def _generate_valid_response(weather: Weather):
+        return Response(
+            success = True,
+            temperature = weather.temperature,
+            percipitation_chance = weather.percipitation_chance,
+            wind_speed = weather.wind_speed,
+            wind_direction = weather.wind_direction,
+            short_forecast = weather.short_forecast,
+            detailed_forecast = weather.detailed_forecast
+        )
 
     def submit_geodata(self, lat, lon) -> Response:
         '''
@@ -31,22 +43,27 @@ class Session:
             )
 
         try:
-            self._cached_nws_data: NWSData = from_geo(lat, lon)
+            self._cached_nws_data = from_geo(lat, lon)
         except IllegalGeoLocation:
             return Response(
                 success = False,
                 err_message = "This location does not have data provided by api.weather.gov"
             )
-        
-        self._cached_weather_data: Weather = self._cached_nws_data.get_forecast()
-        # aliased only because the lines are long and unreadable without it
-        weather = self._cached_weather_data
-        return Response(
-            success = True,
-            temperature = weather.temperature,
-            percipitation_chance = weather.percipitation_chance,
-            wind_speed = weather.wind_speed,
-            wind_direction = weather.wind_direction,
-            short_forecast = weather.short_forecast,
-            detailed_forecast = weather.detailed_forecast
-        )
+
+        self._cached_weather_data = self._cached_nws_data.get_forecast()
+        return self._generate_valid_response(self._cached_weather_data)
+
+    def submit_location(self, location) -> Response:
+        '''
+        Session command to send location to WeatherAPI using geocoder.
+        '''
+        try:
+            self._cached_nws_data = from_location(location)
+        except InvalidLocation:
+            return Response(
+                success = False,
+                err_message = f"Geocoder could not resolve {location}"
+            )
+
+        self._cached_weather_data = self._cached_nws_data.get_forecast()
+        return self._generate_valid_response(self._cached_weather_data)

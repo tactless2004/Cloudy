@@ -4,7 +4,7 @@ TUI/widgets/day_selector.py
 Widget for selecting the day, dynamically changed based on the current day.
 '''
 from textual.app import ComposeResult
-from textual.containers import Center, Horizontal
+from textual.containers import Center
 from textual.widgets import Button
 
 class DaySelector(Center):
