@@ -3,8 +3,10 @@ Utilities for building NWSData objects.
 '''
 import json
 import requests
+from geopy.geocoders import Nominatim
+from geopy.location import Location
 from weatherapi.core.nwsdata import NWSData
-from weatherapi.exceptions import IllegalGeoLocation
+from weatherapi.exceptions import IllegalGeoLocation, InvalidLocation
 
 def from_geo(lat: float, lon: float) -> NWSData:
     '''
@@ -23,4 +25,17 @@ def from_geo(lat: float, lon: float) -> NWSData:
         gridx = gridx,
         gridy = gridy,
         wfo = wfo
+    )
+
+def from_location(location: str) -> NWSData:
+    '''Build a NWSData object from location string using Geocoder Nominatim.'''
+    geolocator = Nominatim(user_agent = "Cloudy")
+    geocoder_result = geolocator.geocode(location)
+
+    if not isinstance(geocoder_result, Location):
+        raise InvalidLocation(f"{geocoder_result} is not recognized by Nominatim")
+
+    return from_geo(
+        lat = geocoder_result.latitude,
+        lon = geocoder_result.longitude
     )
