@@ -1,5 +1,5 @@
 '''
-weatherapi.exceptions
+weatherapi/exceptions/exceptions.py
 
 Exceptions for weatherapi project.
 '''
