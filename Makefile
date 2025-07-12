@@ -5,5 +5,14 @@ lint-win:
 	pyright
 
 lint:
-	pylint $(shell git ls-files '*.py')
-	pyright
+	if [ -d .venv ]; then \
+		.venv/bin/python -m pylint $(shell git ls-files '*.py'); \
+		.venv/bin/python -m pyright; \
+	elif [ -d venv ]; then \
+		venv/bin/python -m pylint $(shell git ls-files '*.py'); \
+		venv/bin/python -m pyright; \
+	else \
+		pylint $(shell git ls-files '*.py'); \
+		pyright; \
+	fi
+
