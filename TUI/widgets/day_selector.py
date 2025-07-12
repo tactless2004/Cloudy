@@ -1,17 +1,18 @@
 from textual.app import App, ComposeResult
-from textual.containers import Horizontal
-from textual.widget import Widget
+from textual.containers import HorizontalGroup
 from textual.widgets import Button
 
-class DaySelector(Widget):
-    CSS_PATH = "day_selector.tcss"
+class DaySelector(HorizontalGroup):
+    DEFAULT_CSS = """
+    GeodataInput {
+        height: 1fr;
+    }
+    """
     def compose(self) -> ComposeResult:
-        yield Horizontal(
-            Button("Today", id = "day1-button"),
-            Button("Tomorrow", id = "day2-button"),
-            Button("Couple Days", id = "day3-button"),
-            Button("Few Days", id = "day4-button"),
-            Button("Several Days", id = "day5-button"),
-            Button("Almost Week", id = "day6-button"),
-            Button("In a Week", id = "day7-button")
-        )
+        yield Button("Today", id = "day1-button")
+        yield Button("Tomorrow", id = "day2-button")
+        yield Button("Couple Days", id = "day3-button")
+        yield Button("Few Days", id = "day4-button")
+        yield Button("Several Days", id = "day5-button")
+        yield Button("Almost Week", id = "day6-button")
+        yield Button("In a Week", id = "day7-button")

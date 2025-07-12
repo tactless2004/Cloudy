@@ -24,7 +24,7 @@ class Weather:
             f"{self.temperature}F, " +
             f"{self.wind_speed} -> {self.wind_direction}\n" +
             f"Precipitation: {self.percipitation_chance}\n" +
-            f"{self.detailed_forecast}"
+            f"{self.short_forecast}"
         )
 
     def get_raw(self, period: int) -> dict:

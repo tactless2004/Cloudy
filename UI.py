@@ -1,28 +1,29 @@
 from textual.app import App, ComposeResult
-from textual.widgets import Input, Button, Label
-from textual.containers import HorizontalGroup, Center
+from textual.widgets import Input, Button, Pretty, Label
+from textual.containers import Vertical
 from weatherapi import from_geo
 from weatherapi.exceptions import IllegalGeoLocation
 from TUI.widgets import DaySelector, GeodataInput
 
 class InputApp(App):
-
+    DEFAULT_CSS = """
+    Label {
+        text-wrap: wrap;
+    }
+    """
     def compose(self) -> ComposeResult:
-        DaySelector()
-        GeodataInput()
-        output_label = Label("", id = "output-label")
-        output_label.styles.height = 20
-        output_label.styles.width = 50
-        output_label.styles.text_align = "center"
-        yield output_label
+        with Vertical():
+            yield GeodataInput()
+            yield DaySelector()
+            yield Label("", id = "output-label")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "weather-input-button":
             # Grab lat, lon values 
             # catch Value Error if the fields are left empty
             try:
-                lat = float(self.query_one("#lat", Input).value)
-                lon = float(self.query_one("#lon", Input).value)
+                lat = float(self.query_one("#latitude-input", Input).value)
+                lon = float(self.query_one("#longitude-input", Input).value)
             except ValueError:
                 self.query_one(
                     "#weather-button-error-label",

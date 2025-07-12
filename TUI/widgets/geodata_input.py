@@ -1,9 +1,14 @@
-from textual.app import ComposeResult, App
-from textual.containers import Horizontal, Vertical
+from textual.app import ComposeResult
+from textual.containers import Vertical, Horizontal
 from textual.widget import Widget
 from textual.widgets import Button, Input, Label
 
 class WeatherButton(Widget):
+    CSS = '''
+        Button {
+            margin-top: 10px;
+        }
+    '''
     def compose(self) -> ComposeResult:
         yield Button(
             "Check Weather",
@@ -16,14 +21,26 @@ class WeatherButton(Widget):
         )
 
 class GeodataInput(Widget):
-    CSS_PATH = "geodata_input.tcss"
+    DEFAULT_CSS = """
+    GeodataInput {
+        height: 10;
+    }
+    """
     def compose(self) -> ComposeResult:
-        yield Horizontal(
-            Vertical(
-                Input("lon", id = "longitude-input"),
-                Input("lat", id = "latitude-input")
-            ),
-            Vertical(
-                WeatherButton()
-            )
-        )
+        with Horizontal():
+            with Vertical():
+                yield Label("Latitude")
+                yield Input(
+                    placeholder = "lat",
+                    id = "latitude-input",
+                    type = "number"
+                )
+
+                yield Label("Longitude")
+                yield Input(
+                    placeholder="lon",
+                    id = "longitude-input",
+                    type = "number"
+                )
+            with Vertical():
+                yield WeatherButton()
