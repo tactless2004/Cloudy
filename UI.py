@@ -10,6 +10,7 @@ from textual.containers import Vertical, Center
 from weatherapi import from_geo
 from weatherapi.exceptions import IllegalGeoLocation
 from TUI.widgets import DaySelector, GeodataInput
+from session import Session, Response
 
 class InputApp(App):
     '''textual UI for Cloudy'''
@@ -21,7 +22,11 @@ class InputApp(App):
         border: solid green;
     }
     """
+
     def compose(self) -> ComposeResult:
+        # It's bad to define self characteristics outside of __init__(),
+        # but it makes sense here.
+        self.session = Session()
         with Vertical():
             yield GeodataInput()
             yield DaySelector()
@@ -36,31 +41,23 @@ class InputApp(App):
         '''Behavior for button events'''
         if event.button.id == "weather-input-button":
             # Grab lat, lon values
-            # catch Value Error if the fields are left empty
-            try:
-                lat = float(self.query_one("#latitude-input", Input).value)
-                lon = float(self.query_one("#longitude-input", Input).value)
-            except ValueError:
+            lat = self.query_one("#latitude-input", Input).value
+            lon = self.query_one("#longitude-input", Input).value
+            response: Response = self.session.submit_geodata(lat, lon)
+
+            # If request is unsuccesful display the response err_message
+            if not response.success and response.err_message:
                 self.query_one(
                     "#weather-button-error-label",
                     Label
-                ).update("Latitude, Longitude must be numeric")
+                ).update(response.err_message)
                 return
 
             # Grab NWS api data, and display
-            try:
-                nws = from_geo(
-                    lat = lat,
-                    lon = lon
-                )
-                w = nws.get_forecast()
-                self.query_one("#output-label", Label).update(str(w))
-            except IllegalGeoLocation:
-                self.query_one(
-                    "#weather-button-error-label",
-                    Label
-                ).update(f"{lat}, {lon} is not recognized by the NWS")
-
+            self.query_one("#output-label", Label).update(
+                f"{response.temperature}°F\n{response.wind_speed} -> {response.wind_direction}\n" +
+                f"Precipitation {response.percipitation_chance}\n{response.short_forecast}"
+            )
 
 if __name__ == "__main__":
     app = InputApp()
