@@ -1,19 +1,9 @@
-# Weather App :sun_behind_rain_cloud:
+# Cloudy :sun_behind_rain_cloud:
 
-Simple Weather App
+Cloudy is a Textual based Weather App with a reuseable [National Weather Service API Client](api.weather.gov).
 
+I made this project to try stateless UI and to try the [Textual](https://github.com/Textualize/textual) project.
 
-### Roadmap
-
-**Weather API**
-
-- [ ] Geocoding interface for resolving addresses
-
-- [ ] Improve data available from Weather objects
-
-Currently, the weather API only offers temperature and wind direction. In the future, I will add Precipitation%, Humidity%, and short weather info like "partly cloudy".
-
-**CLI** :keyboard:
-
-**GUI** :computer:
+### Stateless UI Diagram
+![stateless ui diagram](docs/cloudy-session-dfd.drawio.png)
 
