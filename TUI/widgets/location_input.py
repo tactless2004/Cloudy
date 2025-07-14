@@ -9,12 +9,16 @@ class LocationInput(Widget):
     Textual widget for inputing
     '''
     DEFAULT_CSS = '''
+        LocationInput {
+            border: solid blue;
+            height: 6;
+        }
         Button {
             margin-top: 1;
-            margin-left: 5;
+            margin-left: 1;
         }
-        LocationInput {
-            height: 5;
+        Vertical {
+            width: 1fr;
         }
         #location-error-label {
             margin-top: 1;
@@ -26,6 +30,10 @@ class LocationInput(Widget):
                 yield Label("Location", id = "location-label")
                 yield Input(placeholder = "City, State, County", id = "location-input")
             with Vertical():
-                yield Button("Check Weather", id = "weather-input-button-location")
+                yield Button(
+                    "Check Weather",
+                    id = "weather-input-button-location",
+                    variant = "primary"
+                )
             with Vertical():
                 yield Label("", id = "location-error-label")

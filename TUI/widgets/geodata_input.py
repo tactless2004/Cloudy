@@ -21,7 +21,7 @@ class WeatherButton(Widget):
         yield Button(
             "Check Weather",
             id = "weather-input-button-geodata",
-            variant = "success"
+            variant = "primary"
         )
         yield Label(
             "",
@@ -35,7 +35,10 @@ class GeodataInput(Widget):
         height: 10;
     }
     Center {
-        border: solid green;
+        border: solid purple;
+    }
+    Vertical {
+        width: 1fr;
     }
     """
     def compose(self) -> ComposeResult:

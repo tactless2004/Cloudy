@@ -3,18 +3,17 @@ UI.py
 
 Textual UI for Cloudy
 '''
-# Justification: making python files non-snake-case is poor form.
-#                I might change it later, but for now ignore
 # pylint: disable=C0103
+# Justification: making python files non-snake-case is poor form.
+# I might change it later, but for now ignore
 from textual.app import App, ComposeResult
-from textual.widgets import Input, Button, Label, TabbedContent, TabPane
+from textual.widgets import Input, Button, Label, TabbedContent, TabPane, Markdown
 from textual.containers import Vertical, Center
 from TUI.widgets import LocationInput, GeodataInput
 from session import Session
 
-OUTPUT_PLACEHOLDER = """Hello there!
-The skies haven't spoken yet...
-Hang tight while we check the clouds for you.
+OUTPUT_PLACEHOLDER = """☁️ No forecast yet…\n
+Pick a place to see what the sky’s up to. 🌦️
 """
 
 class InputApp(App):
@@ -40,19 +39,21 @@ class InputApp(App):
                 with TabPane("Geodata", id = "geodata-input-tab"):
                     yield GeodataInput()
             with Center():
-                yield Label(
-                    renderable = OUTPUT_PLACEHOLDER,
-                    id = "output-label"
+                yield Markdown(
+                    markdown = OUTPUT_PLACEHOLDER,
+                    id = "output-markdown"
                 )
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         '''Behavior for button events'''
         # Define up here so its in the scope of the whole function
         response = None
+        location = ""
         if event.button.id == "weather-input-button-geodata":
             # Grab lat, lon values
             lat = self.query_one("#latitude-input", Input).value
             lon = self.query_one("#longitude-input", Input).value
+            location = f"{lat}, {lon}"
             response = self.session.submit_geodata(lat, lon)
 
             # If request is unsuccesful display the response err_message
@@ -76,9 +77,15 @@ class InputApp(App):
 
         # Display Response data (on success)
         if response:
-            self.query_one("#output-label", Label).update(
-                f"{response.temperature}°F\n{response.wind_speed} -> {response.wind_direction}\n" +
-                f"Precipitation {response.percipitation_chance}\n{response.short_forecast}"
+            self.query_one("#output-markdown", Markdown).update(
+                f"""Weather Forecast\n
+Location       : {location}\n
+Temperature    : {response.temperature}°F\n
+Conditions     : {response.short_forecast}\n
+Precipitation  : {response.percipitation_chance}\n
+Wind           :
+{response.wind_speed}{" -> " + response.wind_direction if response.wind_direction else ""}\n
+"""
             )
 
 if __name__ == "__main__":
