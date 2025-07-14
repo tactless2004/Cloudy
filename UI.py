@@ -5,18 +5,26 @@ Textual UI for Cloudy
 '''
 # pylint: disable=C0103
 from textual.app import App, ComposeResult
-from textual.widgets import Input, Button, Label
+from textual.widgets import Input, Button, Label, TabbedContent, TabPane
 from textual.containers import Vertical, Center
 from weatherapi import from_geo
 from weatherapi.exceptions import IllegalGeoLocation
 from TUI.widgets import DaySelector, GeodataInput
 from session import Session, Response
 
+OUTPUT_PLACEHOLDER = """Hello there!
+The skies haven't spoken yet...
+Hang tight while we check the clouds for you.
+"""
+
 class InputApp(App):
     '''textual UI for Cloudy'''
     DEFAULT_CSS = """
     Label {
         text-wrap: wrap;
+    }
+    Tabs{
+        dock: top;
     }
     #output-label {
         border: solid green;
@@ -28,12 +36,14 @@ class InputApp(App):
         # but it makes sense here.
         self.session = Session()
         with Vertical():
-            yield GeodataInput()
-            yield DaySelector()
+            with TabbedContent(initial="location-input-tab"):
+                with TabPane("Geodata", id = "geodata-input-tab"):
+                    yield GeodataInput()
+                with TabPane("Location", id = "location-input-tab"):
+                    yield Label("Placeholder")
             with Center():
                 yield Label(
-                    renderable = "Hello there!\nThe skies haven't spoken yet..." +
-                    "\nHang tight while we check the clouds for you.",
+                    renderable = OUTPUT_PLACEHOLDER,
                     id = "output-label"
                 )
 
@@ -53,7 +63,7 @@ class InputApp(App):
                 ).update(response.err_message)
                 return
 
-            # Grab NWS api data, and display
+            # Display Response data (on success)
             self.query_one("#output-label", Label).update(
                 f"{response.temperature}°F\n{response.wind_speed} -> {response.wind_direction}\n" +
                 f"Precipitation {response.percipitation_chance}\n{response.short_forecast}"
