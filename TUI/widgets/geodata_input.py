@@ -1,7 +1,7 @@
 '''
 TUI/widgets/geodata_input.py
 
-Widget for inputing geodata, supports Geodata and Geocoding look.
+Widget for inputing geodata.
 '''
 from textual.app import ComposeResult
 from textual.containers import Vertical, Horizontal, Center
@@ -20,7 +20,7 @@ class WeatherButton(Widget):
     def compose(self) -> ComposeResult:
         yield Button(
             "Check Weather",
-            id = "weather-input-button",
+            id = "weather-input-button-geodata",
             variant = "success"
         )
         yield Label(

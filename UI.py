@@ -3,14 +3,14 @@ UI.py
 
 Textual UI for Cloudy
 '''
+# Justification: making python files non-snake-case is poor form.
+#                I might change it later, but for now ignore
 # pylint: disable=C0103
 from textual.app import App, ComposeResult
 from textual.widgets import Input, Button, Label, TabbedContent, TabPane
 from textual.containers import Vertical, Center
-from weatherapi import from_geo
-from weatherapi.exceptions import IllegalGeoLocation
-from TUI.widgets import DaySelector, GeodataInput
-from session import Session, Response
+from TUI.widgets import LocationInput, GeodataInput
+from session import Session
 
 OUTPUT_PLACEHOLDER = """Hello there!
 The skies haven't spoken yet...
@@ -23,24 +23,22 @@ class InputApp(App):
     Label {
         text-wrap: wrap;
     }
-    Tabs{
-        dock: top;
-    }
     #output-label {
         border: solid green;
     }
     """
-
+    def __init__(self):
+        self.session = Session()
+        super().__init__()
     def compose(self) -> ComposeResult:
         # It's bad to define self characteristics outside of __init__(),
         # but it makes sense here.
-        self.session = Session()
         with Vertical():
             with TabbedContent(initial="location-input-tab"):
+                with TabPane("Location", id = "location-input-tab"):
+                    yield LocationInput()
                 with TabPane("Geodata", id = "geodata-input-tab"):
                     yield GeodataInput()
-                with TabPane("Location", id = "location-input-tab"):
-                    yield Label("Placeholder")
             with Center():
                 yield Label(
                     renderable = OUTPUT_PLACEHOLDER,
@@ -49,11 +47,13 @@ class InputApp(App):
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         '''Behavior for button events'''
-        if event.button.id == "weather-input-button":
+        # Define up here so its in the scope of the whole function
+        response = None
+        if event.button.id == "weather-input-button-geodata":
             # Grab lat, lon values
             lat = self.query_one("#latitude-input", Input).value
             lon = self.query_one("#longitude-input", Input).value
-            response: Response = self.session.submit_geodata(lat, lon)
+            response = self.session.submit_geodata(lat, lon)
 
             # If request is unsuccesful display the response err_message
             if not response.success and response.err_message:
@@ -62,8 +62,20 @@ class InputApp(App):
                     Label
                 ).update(response.err_message)
                 return
+        elif event.button.id == "weather-input-button-location":
+            location = self.query_one("#location-input", Input).value
+            response = self.session.submit_location(location)
 
-            # Display Response data (on success)
+            # If request is unsuccesful display the response err_message
+            if not response.success and response.err_message:
+                self.query_one(
+                    "#location-error-label",
+                    Label
+                ).update(response.err_message)
+                return
+
+        # Display Response data (on success)
+        if response:
             self.query_one("#output-label", Label).update(
                 f"{response.temperature}°F\n{response.wind_speed} -> {response.wind_direction}\n" +
                 f"Precipitation {response.percipitation_chance}\n{response.short_forecast}"
