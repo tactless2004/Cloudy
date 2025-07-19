@@ -59,6 +59,11 @@ class Session:
         '''
         try:
             self._cached_nws_data = from_location(location)
+        except IllegalGeoLocation:
+            return Response(
+                success = False,
+                err_message = f"{location} is not supported by api.weather.gov"
+            )
         except InvalidLocation:
             return Response(
                 success = False,
