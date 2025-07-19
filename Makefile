@@ -16,3 +16,6 @@ lint:
 		pyright; \
 	fi
 
+docker:
+	docker buildx build -t cloudy .
+	docker run -it cloudy
