@@ -11,6 +11,7 @@ from textual.widgets import Input, Button, Static, TabbedContent, TabPane, Markd
 from textual.containers import Vertical, Center
 from TUI.widgets import LocationInput, GeodataInput
 from session import Session
+from weatherapi.util import geodata_to_location
 
 OUTPUT_PLACEHOLDER = """☁️ No forecast yet…\n
 Pick a place to see what the sky’s up to. 🌦️
@@ -50,10 +51,9 @@ class InputApp(App):
         response = None
         location = ""
         if event.button.id == "weather-input-button-geodata":
-            # Grab lat, lon values
             lat = self.query_one("#latitude-input", Input).value
             lon = self.query_one("#longitude-input", Input).value
-            location = f"{lat}, {lon}"
+            location = geodata_to_location(lat, lon)
             response = self.session.submit_geodata(lat, lon)
 
             # If request is unsuccesful display the response err_message
@@ -90,7 +90,7 @@ Temperature    : {response.temperature}°F\n
 Conditions     : {response.short_forecast}\n
 Precipitation  : {response.percipitation_chance}\n
 Wind           :
-{response.wind_speed}{" -> " + response.wind_direction if response.wind_direction else ""}\n
+{response.wind_speed}{" → " + response.wind_direction if response.wind_direction else ""}\n
 """
             )
 
