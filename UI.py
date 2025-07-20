@@ -63,6 +63,10 @@ class InputApp(App):
                     Static
                 ).update(response.err_message)
                 return
+
+            # On success reset error text
+            self.query_one("#weather-button-error-label", Static).update("")
+
         elif event.button.id == "weather-input-button-location":
             location = self.query_one("#location-input", Input).value
             response = self.session.submit_location(location)
@@ -74,6 +78,8 @@ class InputApp(App):
                     Static
                 ).update(response.err_message)
                 return
+            # On success reset error text
+            self.query_one("#location-error-label", Static).update("")
 
         # Display Response data (on success)
         if response:
