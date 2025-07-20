@@ -6,4 +6,6 @@ COPY . /src
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python3", "TUI/UI.py"]
+WORKDIR /src/TUI
+
+CMD ["python3", "cloudy_textual_ui.py"]

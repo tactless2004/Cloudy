@@ -3,13 +3,18 @@ UI.py
 
 Textual UI for Cloudy
 '''
-# pylint: disable=C0103
-# Justification: making python files non-snake-case is poor form.
-# I might change it later, but for now ignore
+import sys
+import os
+# Typical Python import non-sense:
+#   To make this platform agnostic, we can't use local imports i.e. from ..session import Session
+#   so, add parent director to sys.path
+#   A side effect is the linter will complain about imports not being at the top, ignore this.
+# pylint: disable=C0413
+sys.path.append(os.pardir)
 from textual.app import App, ComposeResult
 from textual.widgets import Input, Button, Static, TabbedContent, TabPane, Markdown
 from textual.containers import Vertical, Center
-from TUI.widgets import LocationInput, GeodataInput
+from widgets import LocationInput, GeodataInput
 from session import Session
 from weatherapi.util import geodata_to_location, location_to_displaylocation
 
