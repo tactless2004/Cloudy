@@ -6,7 +6,7 @@ Widget for inputing geodata.
 from textual.app import ComposeResult
 from textual.containers import Vertical, Horizontal, Center
 from textual.widget import Widget
-from textual.widgets import Button, Input, Label
+from textual.widgets import Button, Input, Static, Label
 
 class WeatherButton(Widget):
     '''
@@ -23,7 +23,7 @@ class WeatherButton(Widget):
             id = "weather-input-button-geodata",
             variant = "primary"
         )
-        yield Label(
+        yield Static(
             "",
             id = "weather-button-error-label"
         )

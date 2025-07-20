@@ -1,6 +1,6 @@
 '''Widget for location input'''
 from textual.app import ComposeResult
-from textual.widgets import Label, Button, Input
+from textual.widgets import Label, Button, Input, Static
 from textual.containers import Vertical, Horizontal
 from textual.widget import Widget
 
@@ -36,4 +36,4 @@ class LocationInput(Widget):
                     variant = "primary"
                 )
             with Vertical():
-                yield Label("", id = "location-error-label")
+                yield Static("", id = "location-error-label")

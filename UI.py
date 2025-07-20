@@ -7,7 +7,7 @@ Textual UI for Cloudy
 # Justification: making python files non-snake-case is poor form.
 # I might change it later, but for now ignore
 from textual.app import App, ComposeResult
-from textual.widgets import Input, Button, Label, TabbedContent, TabPane, Markdown
+from textual.widgets import Input, Button, Static, TabbedContent, TabPane, Markdown
 from textual.containers import Vertical, Center
 from TUI.widgets import LocationInput, GeodataInput
 from session import Session
@@ -60,7 +60,7 @@ class InputApp(App):
             if not response.success and response.err_message:
                 self.query_one(
                     "#weather-button-error-label",
-                    Label
+                    Static
                 ).update(response.err_message)
                 return
         elif event.button.id == "weather-input-button-location":
@@ -71,7 +71,7 @@ class InputApp(App):
             if not response.success and response.err_message:
                 self.query_one(
                     "#location-error-label",
-                    Label
+                    Static
                 ).update(response.err_message)
                 return
 
